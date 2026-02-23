@@ -84,6 +84,10 @@ export class DashboardComponent implements OnInit {
       quiDoit
     );
   }
+  isMathieuDebiteur = computed(() => {
+    const b = this.balance();
+    return b ? b.currentBalance < 0 : false;
+  });
 
   remboursementTotal() {
     const b = this.balance();

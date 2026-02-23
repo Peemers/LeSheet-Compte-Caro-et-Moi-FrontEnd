@@ -5,7 +5,7 @@
            [ngClass]="isMathieuDebiteur() ? 'bg-danger-subtle' : 'bg-success-subtle'">
         <div class="card-body text-center p-4">
           <h2 class="display-6 fw-bold mb-1">{{ balance()?.currentBalance | number:'1.2-2' }} €</h2>
-          <p class="lead mb-3">{{ balance()?.message }}</p>
+          <p class="lead mb-3">{{ balance()?.recommendation }}</p>
 
           <div class="d-flex justify-content-center gap-2">
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addDepenseModal">
