@@ -1,0 +1,34 @@
+<form [formGroup]="depenseForm" (ngSubmit)="onSubmit()">
+  <div class="mb-3">
+    <label class="form-label">Description</label>
+    <input type="text" class="form-control" formControlName="description" placeholder="Ex: Courses Carrefour">
+    @if (depenseForm.get('description')?.invalid && depenseForm.get('description')?.touched) {
+      <small class="text-danger">Minimum 3 caractères requis.</small>
+    }
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Montant (€)</label>
+    <input type="number" class="form-control" formControlName="amount">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Qui a payé ?</label>
+    <select class="form-select" formControlName="paidByUserId">
+      <option [value]="1">Mathieu</option>
+      <option [value]="2">Caroline</option>
+    </select>
+  </div>
+
+  <div class="modal-footer px-0 pb-0">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+    <button type="submit" class="btn btn-primary" [disabled]="depenseForm.invalid || isSubmitting()" data-bs-dismiss="modal">
+      @if (isSubmitting()){
+        <span class="spinner-border spinner-border-sm me-2"></span>
+      } @else {
+        <i class="bi bi-check-lg me-1"></i>
+      }
+      Enregistrer
+    </button>
+  </div>
+</form>

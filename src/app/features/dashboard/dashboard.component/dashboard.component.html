@@ -1,0 +1,111 @@
+<div class="container mt-4">
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card shadow-sm border-0"
+           [ngClass]="isMathieuDebiteur() ? 'bg-danger-subtle' : 'bg-success-subtle'">
+        <div class="card-body text-center p-4">
+          <h2 class="display-6 fw-bold mb-1">{{ balance()?.currentBalance | number:'1.2-2' }} €</h2>
+          <p class="lead mb-3">{{ balance()?.message }}</p>
+
+          <div class="d-flex justify-content-center gap-2">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addDepenseModal">
+              <i class="bi bi-plus-circle me-1"></i> Ajouter une dépense
+            </button>
+            <button class="btn btn-outline-dark" (click)="ouvrirRembousementManuel()" data-bs-toggle="modal" data-bs-target="#addDepenseModal">
+              <i class="bi bi-cash-coin me-1"></i> Remboursement Manuel
+            </button>
+            <button class="btn btn-dark" (click)="remboursementTotal()" [disabled]="balance()?.currentBalance === 0">
+              <i class="bi bi-check2-all me-1"></i> Tout rembourser
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-4">
+      <div class="card border-0 bg-light shadow-sm h-100">
+        <div class="card-body text-center">
+          <small class="text-muted text-uppercase fw-bold">Total Général</small>
+          <h3 class="mb-0">{{ totalGeneral() | number:'1.2-2' }} €</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card border-0 bg-light shadow-sm h-100">
+        <div class="card-body text-center text-primary">
+          <small class="text-muted text-uppercase fw-bold">Payé par {{ balance()?.user1Name }}</small>
+          <h3 class="mb-0">{{ totalMathieu() | number:'1.2-2' }} €</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card border-0 bg-light shadow-sm h-100">
+        <div class="card-body text-center text-info">
+          <small class="text-muted text-uppercase fw-bold">Payé par {{ balance()?.user2Name }}</small>
+          <h3 class="mb-0">{{ totalCaroline() | number:'1.2-2' }} €</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm border-0">
+    <div class="card-header bg-white py-3">
+      <h5 class="mb-0 fw-bold"><i class="bi bi-clock-history me-2"></i>Historique des opérations</h5>
+    </div>
+    <div class="list-group list-group-flush">
+      @for (item of historique(); track item.id) {
+        <div class="list-group-item d-flex justify-content-between align-items-center py-3">
+          <div class="d-flex align-items-center">
+            <div class="rounded-circle p-2 me-3"
+                 [ngClass]="item.isRemboursement ? 'bg-success-subtle text-success' : 'bg-primary-subtle text-primary'">
+              <i class="bi" [ngClass]="item.isRemboursement ? 'bi-arrow-left-right' : 'bi-cart3'"></i>
+            </div>
+
+            <div>
+              <div class="fw-bold d-flex align-items-center">
+                {{ item.description }}
+                @if (item.isRemboursement) {
+                  <span class="badge bg-success ms-2 rounded-pill small" style="font-size: 0.7rem;">REMBOURSEMENT</span>
+                }
+              </div>
+              <div class="small text-muted">
+                Le {{ item.date | date:'dd/MM/yyyy HH:mm' }} par
+                <strong>{{ item.paidByUserId === 1 ? balance()?.user1Name : balance()?.user2Name }}</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex align-items-center">
+            <span class="fs-5 fw-bold me-3" [class.text-success]="item.isRemboursement">
+              {{ item.isRemboursement ? '-' : '' }}{{ item.amount | number:'1.2-2' }} €
+            </span>
+            <button class="btn btn-outline-danger border-0 rounded-circle" (click)="supprimerEntree(item)">
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
+        </div>
+      } @empty {
+        <div class="text-center p-5 text-muted">
+          <i class="bi bi-inbox display-1"></i>
+          <p class="mt-2">Aucune opération pour le moment.</p>
+        </div>
+      }
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="addDepenseModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Nouvelle opération</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <app-add-depense (depenseAjoutee)="chargerDonnees()"></app-add-depense>
+      </div>
+    </div>
+  </div>
+</div>
