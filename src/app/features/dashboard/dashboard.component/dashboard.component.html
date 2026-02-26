@@ -2,19 +2,19 @@
   <div class="row mb-4">
     <div class="col-12">
       <div class="card shadow-sm border-0"
-           [ngClass]="isMathieuDebiteur() ? 'bg-danger-subtle' : 'bg-success-subtle'">
+           [ngClass]="totalMathieu() ? 'bg-danger-subtle' : 'bg-success-subtle'">
         <div class="card-body text-center p-4">
-          <h2 class="display-6 fw-bold mb-1">{{ balance()?.currentBalance | number:'1.2-2' }} €</h2>
-          <p class="lead mb-3">{{ balance()?.message }}</p>
+          <h2 class="display-6 fw-bold mb-1 text-success">{{ balance()?.currentBalance | number:'1.2-2' }} €</h2>
+          <p class="lead mb-3">{{ balance()?.recommendation }}</p>
 
           <div class="d-flex justify-content-center gap-2">
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addDepenseModal">
+            <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#addDepenseModal">
               <i class="bi bi-plus-circle me-1"></i> Ajouter une dépense
             </button>
-            <button class="btn btn-outline-dark" (click)="ouvrirRembousementManuel()" data-bs-toggle="modal" data-bs-target="#addDepenseModal">
+            <button class="btn btn-success" (click)="ouvrirRembousementManuel()" data-bs-toggle="modal" data-bs-target="#addDepenseModal">
               <i class="bi bi-cash-coin me-1"></i> Remboursement Manuel
             </button>
-            <button class="btn btn-dark" (click)="remboursementTotal()" [disabled]="balance()?.currentBalance === 0">
+            <button class="btn btn-danger" (click)="remboursementTotal()" [disabled]="balance()?.currentBalance === 0">
               <i class="bi bi-check2-all me-1"></i> Tout rembourser
             </button>
           </div>
@@ -88,8 +88,8 @@
         </div>
       } @empty {
         <div class="text-center p-5 text-muted">
-          <i class="bi bi-inbox display-1"></i>
-          <p class="mt-2">Aucune opération pour le moment.</p>
+          <i class="bi bi-inbox display-1 text-success "></i>
+          <p class="mt-2 text-success">Aucune opération pour le moment.</p>
         </div>
       }
     </div>
@@ -100,7 +100,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Nouvelle opération</h5>
+        <h5 class="modal-title fw-bold">Nouvelle opération</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
